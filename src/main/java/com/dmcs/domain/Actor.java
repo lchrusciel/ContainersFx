@@ -4,6 +4,12 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 /**
  * Actor model class.
  *
@@ -16,6 +22,8 @@ public class Actor {
     private StringProperty lastName;
     private ObjectProperty<Movie> movie;
 
+    @Id
+    @GeneratedValue
     public Integer getId() {
         return id.get();
     }
@@ -28,6 +36,8 @@ public class Actor {
         return id;
     }
 
+    @NotNull
+    @Size(min=2,max=30)
     public String getFirstName() {
         return firstName.get();
     }
@@ -40,6 +50,8 @@ public class Actor {
         return firstName;
     }
 
+    @NotNull
+    @Size(min=2,max=30)
     public String getLastName() {
         return lastName.get();
     }
@@ -52,6 +64,7 @@ public class Actor {
         return lastName;
     }
 
+    @ManyToOne
     public Movie getMovie() {
         return movie.get();
     }

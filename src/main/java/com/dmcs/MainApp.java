@@ -27,7 +27,7 @@ public class MainApp extends Application{
         this.primaryStage.setTitle("AddressApp");
 
 //        initRootLayout();
-//        showPersonOverview();
+//        showMovieOverview();
     }
 
 }
