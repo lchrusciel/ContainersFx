@@ -1,7 +1,7 @@
-package main.java.com.dmcs.listener;
+package com.dmcs.listener;
 
-import main.java.com.dmcs.domain.Movie;
-import main.java.com.dmcs.event.NewMovieEvent;
+import com.dmcs.domain.Movie;
+import com.dmcs.event.NewMovieEvent;
 import org.springframework.context.ApplicationListener;
 
 /**

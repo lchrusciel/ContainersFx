@@ -1,4 +1,4 @@
-package main.java.com.dmcs.aspect;
+package com.dmcs.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -30,27 +30,27 @@ public class ValidationAspect {
     @Pointcut("execution(public * add*(..))")
     private void addingMovie() {}
 
-    @Pointcut("within(pl.dmcs.service..*)")
+    @Pointcut("within(com.dmcs.service..*)")
     private void isService() {}
 
     @Pointcut("addingMovie() && isService()")
     private void addServiceOperation() {}
 
-    @Around("pl.dmcs.apect.ValidationAspect.addServiceOperation()")
-    private Object Validation(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
-        System.out.println("Validation");
-        Object[] objects = proceedingJoinPoint.getArgs();
-        Set<ConstraintViolation<Object>> validationResult = null;
-
-        for (Object object : objects) {
-            validationResult = validator.validate(object);
-
-            if (validationResult.isEmpty()) {
-                validationResult = null;
-                proceedingJoinPoint.proceed();
-            }
-        }
-
-        return validationResult;
-    }
+//    @Around("com.dmcs.apect.ValidationAspect.addServiceOperation()")
+//    private Object Validation(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+//        System.out.println("Validation");
+//        Object[] objects = proceedingJoinPoint.getArgs();
+//        Set<ConstraintViolation<Object>> validationResult = null;
+//
+//        for (Object object : objects) {
+//            validationResult = validator.validate(object);
+//
+//            if (validationResult.isEmpty()) {
+//                validationResult = null;
+//                proceedingJoinPoint.proceed();
+//            }
+//        }
+//
+//        return validationResult;
+//    }
 }

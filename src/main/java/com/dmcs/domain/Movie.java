@@ -1,17 +1,16 @@
-package main.java.com.dmcs.domain;
+package com.dmcs.domain;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,13 +18,14 @@ import java.util.List;
  *
  * Created by chrustu on 14.06.2015.
  */
+@Entity
 public class Movie {
 
-    private IntegerProperty id;
-    private StringProperty title;
-    private StringProperty director;
-    private ObjectProperty<LocalDate> productionYear;
-    private ObjectProperty<List<Actor>> actors;
+    private IntegerProperty id = new SimpleIntegerProperty(0);
+    private StringProperty title = new SimpleStringProperty("title");
+    private StringProperty director = new SimpleStringProperty("director");
+    private ObjectProperty<LocalDate> productionYear = new SimpleObjectProperty<LocalDate>();
+    private ObjectProperty<List<Actor>> actors = new SimpleObjectProperty<List<Actor>>();
 
     @Id
     @GeneratedValue

@@ -1,9 +1,8 @@
-package main.java.com.dmcs.domain;
+package com.dmcs.domain;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -15,12 +14,13 @@ import javax.validation.constraints.Size;
  *
  * Created by chrustu on 14.06.2015.
  */
+@Entity
 public class Actor {
 
-    private IntegerProperty id;
-    private StringProperty firstName;
-    private StringProperty lastName;
-    private ObjectProperty<Movie> movie;
+    private IntegerProperty id = new SimpleIntegerProperty(0);
+    private StringProperty firstName = new SimpleStringProperty("firstName");
+    private StringProperty lastName = new SimpleStringProperty("lastName");
+    private ObjectProperty<Movie> movie = new SimpleObjectProperty<Movie>();
 
     @Id
     @GeneratedValue

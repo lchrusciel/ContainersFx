@@ -1,6 +1,6 @@
-package main.java.com.dmcs.event;
+package com.dmcs.event;
 
-import main.java.com.dmcs.domain.Movie;
+import com.dmcs.domain.Movie;
 import org.springframework.context.ApplicationEvent;
 
 /**

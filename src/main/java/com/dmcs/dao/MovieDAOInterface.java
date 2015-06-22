@@ -1,6 +1,6 @@
-package main.java.com.dmcs.dao;
+package com.dmcs.dao;
 
-import main.java.com.dmcs.domain.Movie;
+import com.dmcs.domain.Movie;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Component
 public interface MovieDAOInterface {
-    public abstract void addMovie(Movie movie);
-    public abstract Movie receiveMovie(Integer movieId);
-    public abstract List<Movie> receiveAll();
+    void addMovie(Movie movie);
+    Movie receiveMovie(Integer movieId);
+    List<Movie> receiveAll();
 }

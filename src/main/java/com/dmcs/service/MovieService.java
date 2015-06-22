@@ -1,7 +1,7 @@
-package main.java.com.dmcs.service;
+package com.dmcs.service;
 
-import main.java.com.dmcs.dao.MovieDAOInterface;
-import main.java.com.dmcs.domain.Movie;
+import com.dmcs.dao.MovieDAOInterface;
+import com.dmcs.domain.Movie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

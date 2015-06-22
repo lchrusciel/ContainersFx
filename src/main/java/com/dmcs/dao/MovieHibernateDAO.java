@@ -1,7 +1,7 @@
-package main.java.com.dmcs.dao;
+package com.dmcs.dao;
 
-import main.java.com.dmcs.domain.Movie;
-import main.java.com.dmcs.event.NewMovieEvent;
+import com.dmcs.domain.Movie;
+import com.dmcs.event.NewMovieEvent;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
