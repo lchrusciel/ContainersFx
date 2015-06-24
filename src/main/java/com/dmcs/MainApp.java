@@ -17,8 +17,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 
 import javax.validation.ConstraintViolation;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -31,46 +29,16 @@ import java.util.Set;
 public class MainApp extends Application{
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private static AnnotationConfigApplicationContext applicationContext;
     private ObservableList<Movie> movies = FXCollections.observableArrayList();
 
     public static void main(String[] args) {
         Set<ConstraintViolation<Movie>> validationResult;
 
-        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext();
+        applicationContext = new AnnotationConfigApplicationContext();
         applicationContext.getEnvironment().setActiveProfiles("hibernate");
         applicationContext.register(Config.class);
         applicationContext.refresh();
-
-
-        MovieService movieService = applicationContext.getBean(MovieService.class);
-        Movie movie1 = new Movie();
-        movie1.setDirector("Jackson");
-        movie1.setProductionYear(LocalDate.of(1999, 2, 21));
-        movie1.setTitle("Hobbit");
-
-        Actor actor1 = new Actor();
-        actor1.setFirstName("John");
-        actor1.setLastName("Doe");
-        actor1.setMovie(movie1);
-
-        Actor actor2 = new Actor();
-        actor2.setFirstName("Jenny");
-        actor2.setLastName("Doe");
-        actor2.setMovie(movie1);
-
-        Actor actor3 = new Actor();
-        actor3.setFirstName("Jack");
-        actor3.setLastName("Doe");
-        actor3.setMovie(movie1);
-
-        List<Actor> actorsList = new ArrayList<Actor>();
-        actorsList.add(actor1);
-        actorsList.add(actor2);
-        actorsList.add(actor3);
-
-        movie1.setActors(actorsList);
-        movieService.addMovie(movie1);
-        System.out.println(movieService.receiveAll());
 
         launch(args);
     }
@@ -114,7 +82,7 @@ public class MainApp extends Application{
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             OverviewController controller = loader.getController();
-            controller.setMainApp(this);
+            controller.setMovieService(applicationContext.getBean(MovieService.class));
 
             rootLayout.setCenter(personOverview);
         } catch (IOException e) {

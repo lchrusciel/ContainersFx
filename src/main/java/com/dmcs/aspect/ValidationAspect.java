@@ -36,21 +36,21 @@ public class ValidationAspect {
     @Pointcut("addingMovie() && isService()")
     private void addServiceOperation() {}
 
-//    @Around("com.dmcs.apect.ValidationAspect.addServiceOperation()")
-//    private Object Validation(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
-//        System.out.println("Validation");
-//        Object[] objects = proceedingJoinPoint.getArgs();
-//        Set<ConstraintViolation<Object>> validationResult = null;
-//
-//        for (Object object : objects) {
-//            validationResult = validator.validate(object);
-//
-//            if (validationResult.isEmpty()) {
-//                validationResult = null;
-//                proceedingJoinPoint.proceed();
-//            }
-//        }
-//
-//        return validationResult;
-//    }
+    @Around("com.dmcs.aspect.ValidationAspect.addServiceOperation()")
+    private Object Validation(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
+        System.out.println("Validation");
+        Object[] objects = proceedingJoinPoint.getArgs();
+        Set<ConstraintViolation<Object>> validationResult = null;
+
+        for (Object object : objects) {
+            validationResult = validator.validate(object);
+
+            if (validationResult.isEmpty()) {
+                validationResult = null;
+                proceedingJoinPoint.proceed();
+            }
+        }
+
+        return validationResult;
+    }
 }

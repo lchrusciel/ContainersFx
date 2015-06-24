@@ -17,9 +17,13 @@ public class MovieService {
     @Autowired
     private MovieDAOInterface movieDao;
 
-    public Set<ConstraintViolation<Movie>> addMovie(Movie movie) {
-        movieDao.addMovie(movie);
+    public Set<ConstraintViolation<Movie>> addOrUpdateMovie(Movie movie) {
+        movieDao.addOrUpdateMovie(movie);
         return null;
+    }
+
+    public void deleteMovie(Movie movie){
+        movieDao.deleteMovie(movie);
     }
 
     public Movie receiveMovie(Integer movieId) {

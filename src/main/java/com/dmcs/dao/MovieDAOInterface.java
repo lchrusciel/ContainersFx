@@ -10,7 +10,8 @@ import java.util.List;
  */
 @Component
 public interface MovieDAOInterface {
-    void addMovie(Movie movie);
+    void addOrUpdateMovie(Movie movie);
+    void deleteMovie(Movie id);
     Movie receiveMovie(Integer movieId);
     List<Movie> receiveAll();
 }

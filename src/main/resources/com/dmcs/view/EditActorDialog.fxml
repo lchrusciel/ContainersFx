@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="150.0" prefWidth="200.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dmcs.view.EditActorDialogController">
+   <children>
+      <GridPane hgap="5.0" layoutX="200.0" layoutY="155.0" vgap="5.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="10.0" prefWidth="67.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="113.0" minWidth="10.0" prefWidth="108.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <children>
+            <Label text="First name" />
+            <Label text="Last name" GridPane.rowIndex="1" />
+            <TextField fx:id="firstName" GridPane.columnIndex="1" />
+            <TextField fx:id="lastName" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+      <ButtonBar layoutX="33.0" layoutY="110.0" prefHeight="40.0" prefWidth="167.0" AnchorPane.rightAnchor="0.0">
+        <buttons>
+          <Button mnemonicParsing="false" onAction="#handleOk" text="Ok" />
+            <Button mnemonicParsing="false" onAction="#handleCancel" text="Cancel" />
+        </buttons>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
+      </ButtonBar>
+   </children>
+</AnchorPane>

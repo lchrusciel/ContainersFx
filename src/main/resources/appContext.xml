@@ -17,7 +17,7 @@
         <property name="dataSource" ref="dataSource" />
         <property name="packagesToScan">
             <list>
-                <value>pl.dmcs</value>
+                <value>com.dmcs</value>
             </list>
         </property>
         <property name="hibernateProperties">

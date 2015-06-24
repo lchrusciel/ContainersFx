@@ -5,10 +5,7 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +21,7 @@ public class Movie {
     private IntegerProperty id = new SimpleIntegerProperty(0);
     private StringProperty title = new SimpleStringProperty("title");
     private StringProperty director = new SimpleStringProperty("director");
-    private ObjectProperty<LocalDate> productionYear = new SimpleObjectProperty<LocalDate>();
+    private StringProperty productionYear = new SimpleStringProperty("productionYear");
     private ObjectProperty<List<Actor>> actors = new SimpleObjectProperty<List<Actor>>();
 
     @Id
@@ -68,20 +65,20 @@ public class Movie {
     }
 
     @NotBlank
-    public LocalDate getProductionYear() {
+    public String getProductionYear() {
         return productionYear.get();
     }
 
-    public void setProductionYear(LocalDate productionYear) {
+    public void setProductionYear(String productionYear) {
         this.productionYear.set(productionYear);
     }
 
-    @OneToMany(mappedBy="movie")
-    @Cascade(value= CascadeType.ALL)
-    public ObjectProperty<LocalDate> productionYearProperty() {
+    public StringProperty productionYearProperty() {
         return productionYear;
     }
 
+    @OneToMany(mappedBy="movie", fetch = FetchType.EAGER)
+    @Cascade(value= CascadeType.ALL)
     public List<Actor> getActors() {
         return actors.get();
     }
