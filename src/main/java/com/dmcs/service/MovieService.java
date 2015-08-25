@@ -17,20 +17,20 @@ public class MovieService {
     @Autowired
     private MovieDAOInterface movieDao;
 
-    public Set<ConstraintViolation<Movie>> addOrUpdateMovie(Movie movie) {
-        movieDao.addOrUpdateMovie(movie);
+    public Set<ConstraintViolation<Movie>> addOrUpdate(Movie movie) {
+        movieDao.addOrUpdate(movie);
         return null;
     }
 
-    public void deleteMovie(Movie movie){
-        movieDao.deleteMovie(movie);
+    public void delete(Movie movie){
+        movieDao.delete(movie);
     }
 
-    public Movie receiveMovie(Integer movieId) {
+    public Movie receive(Integer movieId) {
         return movieDao.receiveMovie(movieId);
     }
 
     public List<Movie> receiveAll() {
-        return movieDao.receiveAll();
+        return movieDao.receiveMovies();
     }
 }

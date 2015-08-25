@@ -1,11 +1,8 @@
 package com.dmcs.view;
 
-import com.dmcs.MainApp;
 import com.dmcs.domain.Actor;
 import com.dmcs.domain.Movie;
 import com.dmcs.service.MovieService;
-import com.dmcs.util.DateUtil;
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,13 +14,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by chrustu on 19.06.2015.
@@ -204,7 +197,7 @@ public class OverviewController {
     @FXML
     private void handleDeleteMovie() {
         Movie movie = movieTable.getSelectionModel().getSelectedItem();
-        movieService.deleteMovie(movie);
+        movieService.delete(movie);
         movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
     }
 }

@@ -1,6 +1,8 @@
 package com.dmcs.dao;
 
+import com.dmcs.domain.Actor;
 import com.dmcs.domain.Movie;
+import com.dmcs.event.NewActorEvent;
 import com.dmcs.event.NewMovieEvent;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -20,7 +22,7 @@ import java.util.List;
 @Transactional
 @Repository
 @Profile("hibernate")
-public class MovieHibernateDAO implements MovieDAOInterface {
+public class HibernateDAO implements MovieDAOInterface, ActorDAOInterface {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -28,26 +30,57 @@ public class MovieHibernateDAO implements MovieDAOInterface {
     @Autowired
     private ApplicationEventPublisher publisher;
 
-    public void addOrUpdateMovie(Movie movie) {
+    @Override
+    public void addOrUpdate(Movie movie) {
         this.publisher.publishEvent(new NewMovieEvent(movie));
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(movie);
     }
 
-    public void deleteMovie(Movie movie) {
+    @Override
+    public void delete(Movie movie) {
         Session session = sessionFactory.getCurrentSession();
         if (movie != null) {
             session.delete(movie);
         }
     }
 
+    @Override
     public Movie receiveMovie(Integer movieId) {
         Session session = sessionFactory.getCurrentSession();
         return (Movie) session.get(Movie.class, movieId);
     }
 
-    public List<Movie> receiveAll() {
+    @Override
+    public List<Movie> receiveMovies() {
         Session session = sessionFactory.getCurrentSession();
         return session.createCriteria(Movie.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+    }
+
+    @Override
+    public void addOrUpdate(Actor actor) {
+        this.publisher.publishEvent(new NewActorEvent(actor));
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(actor);
+    }
+
+    @Override
+    public void delete(Actor actor) {
+        Session session = sessionFactory.getCurrentSession();
+        if (actor != null) {
+            session.delete(actor);
+        }
+    }
+
+    @Override
+    public Actor receiveActor(Integer actorId) {
+        Session session = sessionFactory.getCurrentSession();
+        return (Actor) session.get(Movie.class, actorId);
+    }
+
+    @Override
+    public List<Actor> receiveActors() {
+        Session session = sessionFactory.getCurrentSession();
+        return session.createCriteria(Actor.class).setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 }

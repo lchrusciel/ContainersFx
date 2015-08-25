@@ -60,7 +60,7 @@ public class EditActorDialogController {
 
         movie.getActors().add(actor);
 
-        if (null == (errors = movieService.addOrUpdateMovie(movie))) {
+        if (null == (errors = movieService.addOrUpdate(movie))) {
             stage.close();
             return;
         }

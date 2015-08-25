@@ -68,7 +68,7 @@ public class EditMovieDialogController {
         this.movie.setProductionYear(productionYearTextField.getText());
         Set<ConstraintViolation<Movie>> errors;
 
-        if (null == (errors = movieService.addOrUpdateMovie(this.movie))) {
+        if (null == (errors = movieService.addOrUpdate(this.movie))) {
             stage.close();
             return;
         }

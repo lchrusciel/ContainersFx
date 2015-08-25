@@ -28,17 +28,16 @@ public class ValidationAspect {
     }
 
     @Pointcut("execution(public * add*(..))")
-    private void addingMovie() {}
+    private void newObject() {}
 
     @Pointcut("within(com.dmcs.service..*)")
     private void isService() {}
 
-    @Pointcut("addingMovie() && isService()")
+    @Pointcut("newObject() && isService()")
     private void addServiceOperation() {}
 
     @Around("com.dmcs.aspect.ValidationAspect.addServiceOperation()")
     private Object Validation(ProceedingJoinPoint proceedingJoinPoint) throws Throwable{
-        System.out.println("Validation");
         Object[] objects = proceedingJoinPoint.getArgs();
         Set<ConstraintViolation<Object>> validationResult = null;
 
