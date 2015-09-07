@@ -10,8 +10,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
- * Actor model class.
- *
  * Created by chrustu on 14.06.2015.
  */
 @Entity

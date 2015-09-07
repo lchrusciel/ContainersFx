@@ -140,6 +140,36 @@ public class OverviewController {
             Scene scene = new Scene(newActor);
 
             Stage dialogStage = new Stage();
+            dialogStage.setTitle("Create new actor");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setScene(scene);
+
+            EditActorDialogController controller = loader.getController();
+            controller.setMovieService(movieService);
+            controller.setStage(dialogStage);
+            controller.setMovie(movieTable.getSelectionModel().getSelectedItem());
+
+            dialogStage.showAndWait();
+            movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleEditActor() {
+        try {
+            if (null == movieTable.getSelectionModel().getSelectedItem()) {
+                noChoosenMovie();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(OverviewController.class.getResource("EditActorDialog.fxml"));
+            AnchorPane newActor = (AnchorPane) loader.load();
+            Scene scene = new Scene(newActor);
+
+            Stage dialogStage = new Stage();
             dialogStage.setTitle("Edit actor");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setScene(scene);
@@ -148,6 +178,7 @@ public class OverviewController {
             controller.setMovieService(movieService);
             controller.setStage(dialogStage);
             controller.setMovie(movieTable.getSelectionModel().getSelectedItem());
+            controller.setActor(actorsTable.getSelectionModel().getSelectedItem());
 
             dialogStage.showAndWait();
             movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
@@ -168,7 +199,7 @@ public class OverviewController {
             Scene scene = new Scene(newMovie);
 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit movie");
+            dialogStage.setTitle("Create new movie");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.setScene(scene);
 
