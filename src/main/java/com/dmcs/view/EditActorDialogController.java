@@ -2,6 +2,7 @@ package com.dmcs.view;
 
 import com.dmcs.domain.Actor;
 import com.dmcs.domain.Movie;
+import com.dmcs.service.ActorService;
 import com.dmcs.service.MovieService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -27,7 +28,7 @@ public class EditActorDialogController {
     private Movie movie;
 
     @Autowired
-    private MovieService movieService;
+    private ActorService actorService;
 
     public void setStage(Stage stage) {
         this.stage = stage;
@@ -41,8 +42,8 @@ public class EditActorDialogController {
         this.movie = movie;
     }
 
-    public void setMovieService(MovieService movieService) {
-        this.movieService = movieService;
+    public void setActorService(ActorService actorService) {
+        this.actorService = actorService;
     }
 
     public void handleCancel() {
@@ -50,17 +51,15 @@ public class EditActorDialogController {
     }
 
     public void handleOk() {
-        Set<ConstraintViolation<Movie>> errors;
+        Set<ConstraintViolation<Actor>> errors;
 
         this.actor = new Actor();
 
         this.actor.setFirstName(firstName.getText());
         this.actor.setLastName(lastName.getText());
-        this.actor.setMovie(movie);
+        this.actor.setMovie(this.movie);
 
-        movie.getActors().add(actor);
-
-        if (null == (errors = movieService.addOrUpdate(movie))) {
+        if (null == (errors = actorService.addOrUpdate(this.actor))) {
             stage.close();
             return;
         }
@@ -73,7 +72,11 @@ public class EditActorDialogController {
         alert.showAndWait();
     }
 
-    private static String printValidationResult(Set<ConstraintViolation<Movie>> validationResult) {
+    public Movie getMovie() {
+        return this.movie;
+    }
+
+    private static String printValidationResult(Set<ConstraintViolation<Actor>> validationResult) {
         StringBuilder message = new StringBuilder();
         for (Iterator iterator = validationResult.iterator(); iterator
                 .hasNext();) {

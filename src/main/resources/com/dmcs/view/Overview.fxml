@@ -87,7 +87,7 @@
                                 <buttons>
                                   <Button mnemonicParsing="false" onAction="#handleNewActor" text="New" />
                                     <Button mnemonicParsing="false" onAction="#handleEditActor" text="Edit" />
-                                    <Button mnemonicParsing="false" text="Delete" />
+                                    <Button mnemonicParsing="false" onAction="#handleDeleteActor" text="Delete" />
                                 </buttons>
                                  <padding>
                                     <Insets right="10.0" />

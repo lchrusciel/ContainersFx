@@ -81,6 +81,10 @@ public class EditMovieDialogController {
         alert.showAndWait();
     }
 
+    public Movie getMovie() {
+        return this.movie;
+    }
+
     private static String printValidationResult(Set<ConstraintViolation<Movie>> validationResult) {
         StringBuilder message = new StringBuilder();
         for (Iterator iterator = validationResult.iterator(); iterator

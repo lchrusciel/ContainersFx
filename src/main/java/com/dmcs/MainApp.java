@@ -3,6 +3,7 @@ package com.dmcs;
 import com.dmcs.config.Config;
 import com.dmcs.domain.Actor;
 import com.dmcs.domain.Movie;
+import com.dmcs.service.ActorService;
 import com.dmcs.service.MovieService;
 import com.dmcs.view.OverviewController;
 import javafx.application.Application;
@@ -83,6 +84,7 @@ public class MainApp extends Application{
 
             OverviewController controller = loader.getController();
             controller.setMovieService(applicationContext.getBean(MovieService.class));
+            controller.setActorService(applicationContext.getBean(ActorService.class));
 
             rootLayout.setCenter(personOverview);
         } catch (IOException e) {

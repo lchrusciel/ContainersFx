@@ -15,6 +15,6 @@ public class AddActorListener implements ApplicationListener<NewActorEvent> {
     @Override
     public void onApplicationEvent(NewActorEvent event) {
         Actor actor = (Actor)event.getSource();
-        System.out.printf("Actor with name %s was created.", actor.getFirstName() + " " + actor.getLastName());
+        System.out.println("Actor with name " + actor.getFirstName() + " " + actor.getLastName() + " was created.");
     }
 }

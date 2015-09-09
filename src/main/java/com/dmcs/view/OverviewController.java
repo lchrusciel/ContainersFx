@@ -2,6 +2,7 @@ package com.dmcs.view;
 
 import com.dmcs.domain.Actor;
 import com.dmcs.domain.Movie;
+import com.dmcs.service.ActorService;
 import com.dmcs.service.MovieService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -17,6 +18,8 @@ import javafx.stage.Stage;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by chrustu on 19.06.2015.
@@ -46,6 +49,7 @@ public class OverviewController {
 
 //    @Autowired
     private MovieService movieService;
+    private ActorService actorService;
 
     @FXML
     private void initialize() {
@@ -68,25 +72,60 @@ public class OverviewController {
         movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
     }
 
+    public void setActorService(ActorService actorService) {
+        this.actorService = actorService;
+    }
+
     /**
      * Fills all text fields to show details about the person.
      * If the specified person is null, all text fields are cleared.
      *
-     * @param movie the person or null
+     * @param movie the movie or null
      */
     private void showMovieDetails(Movie movie) {
         if (movie != null) {
+            List<Actor> actors;
             // Fill the labels with info from the person object.
             titleLabel.setText(movie.getTitle());
             directorLabel.setText(movie.getDirector());
             productionYearLabel.setText(movie.getProductionYear());
 
-            actorsTable.setItems(FXCollections.observableArrayList(movie.getActors()));
+            if (null == (actors = movie.getActors())) {
+                actors = new ArrayList<Actor>();
+            }
+            actorsTable.setItems(FXCollections.observableArrayList(actors));
         } else {
             // Person is null, remove all the text.
             titleLabel.setText("");
             directorLabel.setText("");
             productionYearLabel.setText("");
+        }
+    }
+
+    /**
+     * Called when he user clicks on the new button
+     */
+    @FXML
+    private void handleNewMovie() {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(OverviewController.class.getResource("EditMovieDialog.fxml"));
+            AnchorPane newMovie = (AnchorPane) loader.load();
+            Scene scene = new Scene(newMovie);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Create new movie");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.setScene(scene);
+
+            EditMovieDialogController controller = loader.getController();
+            controller.setMovieService(movieService);
+            controller.setStage(dialogStage);
+
+            dialogStage.showAndWait();
+            updateView(controller.getMovie());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -116,11 +155,20 @@ public class OverviewController {
             controller.setMovie(movieTable.getSelectionModel().getSelectedItem());
 
             dialogStage.showAndWait();
-            movieTable.getItems().clear();
-            movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
+            updateView(controller.getMovie());
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Called when he user clicks on the delete button
+     */
+    @FXML
+    private void handleDeleteMovie() {
+        Movie movie = movieTable.getSelectionModel().getSelectedItem();
+        movieService.delete(movie);
+        movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
     }
 
     /**
@@ -145,12 +193,13 @@ public class OverviewController {
             dialogStage.setScene(scene);
 
             EditActorDialogController controller = loader.getController();
-            controller.setMovieService(movieService);
+            controller.setActorService(actorService);
             controller.setStage(dialogStage);
             controller.setMovie(movieTable.getSelectionModel().getSelectedItem());
+            controller.setActor(actorsTable.getSelectionModel().getSelectedItem());
 
             dialogStage.showAndWait();
-            movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
+            updateView(controller.getMovie());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -159,8 +208,8 @@ public class OverviewController {
     @FXML
     private void handleEditActor() {
         try {
-            if (null == movieTable.getSelectionModel().getSelectedItem()) {
-                noChoosenMovie();
+            if (null == actorsTable.getSelectionModel().getSelectedItem()) {
+                noChoosenActor();
                 return;
             }
 
@@ -175,7 +224,7 @@ public class OverviewController {
             dialogStage.setScene(scene);
 
             EditActorDialogController controller = loader.getController();
-            controller.setMovieService(movieService);
+            controller.setActorService(actorService);
             controller.setStage(dialogStage);
             controller.setMovie(movieTable.getSelectionModel().getSelectedItem());
             controller.setActor(actorsTable.getSelectionModel().getSelectedItem());
@@ -188,47 +237,39 @@ public class OverviewController {
     }
 
     /**
-     * Called when he user clicks on the new button
-     */
-    @FXML
-    private void handleNewMovie() {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(OverviewController.class.getResource("EditMovieDialog.fxml"));
-            AnchorPane newMovie = (AnchorPane) loader.load();
-            Scene scene = new Scene(newMovie);
-
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Create new movie");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.setScene(scene);
-
-            EditMovieDialogController controller = loader.getController();
-            controller.setMovieService(movieService);
-            controller.setStage(dialogStage);
-
-            dialogStage.showAndWait();
-            movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void noChoosenMovie() {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.setTitle("Choose movie!");
-        alert.setHeaderText("You did not choose the movie.");
-        alert.setContentText("You have to choose the movie before you will be able to add actor to it.");
-        alert.showAndWait();
-    }
-
-    /**
      * Called when he user clicks on the delete button
      */
     @FXML
-    private void handleDeleteMovie() {
-        Movie movie = movieTable.getSelectionModel().getSelectedItem();
-        movieService.delete(movie);
+    private void handleDeleteActor() {
+        if (null == actorsTable.getSelectionModel().getSelectedItem()) {
+            noChoosenActor();
+            return;
+        }
+
+        Actor actor = actorsTable.getSelectionModel().getSelectedItem();
+        actorService.delete(actor);
+        updateView(movieTable.getSelectionModel().getSelectedItem());
+    }
+
+    private void updateView(Movie movie) {
+        movieTable.getItems().clear();
+        movieTable.getSelectionModel().clearSelection();
         movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
+        movieTable.getSelectionModel().select(movie);
+    }
+
+    private void noChoosenMovie() {
+        renderWarning("movie");
+    }
+    private void noChoosenActor() {
+        renderWarning("actor");
+    }
+
+    private void renderWarning(String subject) {
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Choose " + subject + "!");
+        alert.setHeaderText("You did not choose the " + subject + ".");
+        alert.setContentText("You have to choose the " + subject + " before you will be able to edit it.");
+        alert.showAndWait();
     }
 }
