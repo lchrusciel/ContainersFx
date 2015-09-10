@@ -3,7 +3,6 @@ package com.dmcs.view;
 import com.dmcs.domain.Actor;
 import com.dmcs.domain.Movie;
 import com.dmcs.service.ActorService;
-import com.dmcs.service.MovieService;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
@@ -34,12 +33,22 @@ public class EditActorDialogController {
         this.stage = stage;
     }
 
-    public void setActor(Actor actor) {
-        this.actor = actor;
+    public Movie getMovie() {
+        return this.movie;
     }
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public Actor getActor() {
+        return this.actor;
+    }
+
+    public void setActor(Actor actor) {
+        this.actor = actor;
+        firstName.setText(actor.getFirstName());
+        lastName.setText(actor.getLastName());
     }
 
     public void setActorService(ActorService actorService) {
@@ -53,27 +62,44 @@ public class EditActorDialogController {
     public void handleOk() {
         Set<ConstraintViolation<Actor>> errors;
 
-        this.actor = new Actor();
+        if (null == this.actor) {
+            errors = createNewActor();
+        } else {
+            errors = updateActor();
+        }
 
-        this.actor.setFirstName(firstName.getText());
-        this.actor.setLastName(lastName.getText());
-        this.actor.setMovie(this.movie);
-
-        if (null == (errors = actorService.addOrUpdate(this.actor))) {
+        if (null == errors) {
             stage.close();
             return;
         }
 
+        showAlert(errors);
+    }
+
+    private Set<ConstraintViolation<Actor>> createNewActor() {
+        this.actor = new Actor();
+        this.actor.setFirstName(firstName.getText());
+        this.actor.setLastName(lastName.getText());
+        this.actor.setMovie(this.movie);
+
+        return actorService.add(this.actor);
+    }
+
+    private Set<ConstraintViolation<Actor>> updateActor() {
+
+        this.actor.setFirstName(firstName.getText());
+        this.actor.setLastName(lastName.getText());
+
+        return actorService.update(this.actor);
+    }
+
+    private void showAlert(Set<ConstraintViolation<Actor>> errors) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Invalid fields");
         alert.setHeaderText("Please correct invalid fields");
         alert.setContentText(printValidationResult(errors));
 
         alert.showAndWait();
-    }
-
-    public Movie getMovie() {
-        return this.movie;
     }
 
     private static String printValidationResult(Set<ConstraintViolation<Actor>> validationResult) {

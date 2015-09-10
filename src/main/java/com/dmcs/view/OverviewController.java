@@ -51,6 +51,9 @@ public class OverviewController {
     private MovieService movieService;
     private ActorService actorService;
 
+    static private final String EDIT = "edit";
+    static private final String DELETE = "delete";
+
     @FXML
     private void initialize() {
         titleColumn.setCellValueFactory(cellData -> cellData.getValue().titleProperty());
@@ -136,7 +139,7 @@ public class OverviewController {
     private void handlEditMovie() {
         try {
             if (null == movieTable.getSelectionModel().getSelectedItem()) {
-                noChoosenMovie();
+                noChoosenMovie(EDIT);
                 return;
             }
             FXMLLoader loader = new FXMLLoader();
@@ -166,7 +169,13 @@ public class OverviewController {
      */
     @FXML
     private void handleDeleteMovie() {
-        Movie movie = movieTable.getSelectionModel().getSelectedItem();
+        Movie movie;
+
+        if (null == (movie = movieTable.getSelectionModel().getSelectedItem())) {
+            noChoosenMovie(DELETE);
+            return;
+        }
+
         movieService.delete(movie);
         movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
     }
@@ -178,7 +187,7 @@ public class OverviewController {
     private void handleNewActor() {
         try {
             if (null == movieTable.getSelectionModel().getSelectedItem()) {
-                noChoosenMovie();
+                noChoosenMovie(EDIT);
                 return;
             }
 
@@ -196,10 +205,9 @@ public class OverviewController {
             controller.setActorService(actorService);
             controller.setStage(dialogStage);
             controller.setMovie(movieTable.getSelectionModel().getSelectedItem());
-            controller.setActor(actorsTable.getSelectionModel().getSelectedItem());
 
             dialogStage.showAndWait();
-            updateView(controller.getMovie());
+            updateViewWithActor(controller.getMovie(), controller.getActor());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -209,7 +217,7 @@ public class OverviewController {
     private void handleEditActor() {
         try {
             if (null == actorsTable.getSelectionModel().getSelectedItem()) {
-                noChoosenActor();
+                noChoosenActor(EDIT);
                 return;
             }
 
@@ -230,7 +238,7 @@ public class OverviewController {
             controller.setActor(actorsTable.getSelectionModel().getSelectedItem());
 
             dialogStage.showAndWait();
-            movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
+            updateViewWithActor(controller.getMovie(), controller.getActor());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -241,12 +249,13 @@ public class OverviewController {
      */
     @FXML
     private void handleDeleteActor() {
-        if (null == actorsTable.getSelectionModel().getSelectedItem()) {
-            noChoosenActor();
+        Actor actor;
+
+        if (null == (actor = actorsTable.getSelectionModel().getSelectedItem())) {
+            noChoosenActor(DELETE);
             return;
         }
 
-        Actor actor = actorsTable.getSelectionModel().getSelectedItem();
         actorService.delete(actor);
         updateView(movieTable.getSelectionModel().getSelectedItem());
     }
@@ -255,21 +264,31 @@ public class OverviewController {
         movieTable.getItems().clear();
         movieTable.getSelectionModel().clearSelection();
         movieTable.setItems(FXCollections.observableArrayList(movieService.receiveAll()));
-        movieTable.getSelectionModel().select(movie);
+
+        if (null != movie) {
+            movie = movieService.receive(movie.getId());
+            movieTable.getSelectionModel().select(movie);
+        }
     }
 
-    private void noChoosenMovie() {
-        renderWarning("movie");
-    }
-    private void noChoosenActor() {
-        renderWarning("actor");
+    private void updateViewWithActor(Movie movie, Actor actor) {
+        updateView(movie);
+        actorsTable.getSelectionModel().clearSelection();
+        actorsTable.getSelectionModel().select(actor);
     }
 
-    private void renderWarning(String subject) {
+    private void noChoosenMovie(String action) {
+        renderWarning("movie", action);
+    }
+    private void noChoosenActor(String action) {
+        renderWarning("actor", action);
+    }
+
+    private void renderWarning(String subject, String action) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Choose " + subject + "!");
         alert.setHeaderText("You did not choose the " + subject + ".");
-        alert.setContentText("You have to choose the " + subject + " before you will be able to edit it.");
+        alert.setContentText("You have to choose the " + subject + " before you will be able to " + action + " it.");
         alert.showAndWait();
     }
 }

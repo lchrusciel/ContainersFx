@@ -27,12 +27,8 @@ public class HibernateDAO implements MovieDAOInterface, ActorDAOInterface {
     @Autowired
     private SessionFactory sessionFactory;
 
-    @Autowired
-    private ApplicationEventPublisher publisher;
-
     @Override
     public void addOrUpdate(Movie movie) {
-        this.publisher.publishEvent(new NewMovieEvent(movie));
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(movie);
     }
@@ -59,7 +55,6 @@ public class HibernateDAO implements MovieDAOInterface, ActorDAOInterface {
 
     @Override
     public void addOrUpdate(Actor actor) {
-        this.publisher.publishEvent(new NewActorEvent(actor));
         Session session = sessionFactory.getCurrentSession();
         session.saveOrUpdate(actor);
     }

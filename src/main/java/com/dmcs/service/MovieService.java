@@ -2,7 +2,9 @@ package com.dmcs.service;
 
 import com.dmcs.dao.MovieDAOInterface;
 import com.dmcs.domain.Movie;
+import com.dmcs.event.NewMovieEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
@@ -17,7 +19,16 @@ public class MovieService {
     @Autowired
     private MovieDAOInterface movieDao;
 
-    public Set<ConstraintViolation<Movie>> addOrUpdate(Movie movie) {
+    @Autowired
+    private ApplicationEventPublisher publisher;
+
+    public Set<ConstraintViolation<Movie>> add(Movie movie) {
+        this.publisher.publishEvent(new NewMovieEvent(movie));
+        movieDao.addOrUpdate(movie);
+        return null;
+    }
+
+    public Set<ConstraintViolation<Movie>> update(Movie movie) {
         movieDao.addOrUpdate(movie);
         return null;
     }

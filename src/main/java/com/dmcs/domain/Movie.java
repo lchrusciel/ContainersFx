@@ -1,5 +1,6 @@
 package com.dmcs.domain;
 
+import com.dmcs.constraint.YearConstraint;
 import javafx.beans.property.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -64,6 +65,7 @@ public class Movie {
         return director;
     }
 
+    @YearConstraint
     @NotBlank
     public String getProductionYear() {
         return productionYear.get();
